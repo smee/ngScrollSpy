@@ -417,7 +417,7 @@ mod.directive('pageitems', function(ScrollSpy) {
 	};
 });
 mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
-	var postlinkfn = function(scope, element) {
+	var postlinkfn = function(scope, element, childClasses) {
 		var stack = []; // stack to build tree
 		var parentstack= []; // current ancestry
 		var lastitem; // used to build the tree
@@ -481,7 +481,7 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 			var item = itemConstruct(items[i]);
 			if (item.push) {
 				// new submenu
-				markup += '<menu class="nav">';
+				markup += '<menu class="nav ' + (childClasses?childClasses:'') + '">';
 			} else if (item.pop) {
 				// closing submenu, maybe more than one
 				for (var j = 0; j < item.pop; j++) {
@@ -523,20 +523,21 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 		restrict: 'E',
 		replace: true,
 		template: '<menu class="nav pagemenu"></menu>',
-		link: function(scope, element) {
+		link: function(scope, element, attrs) {
 			// We can't create menu if pageitems element hasn't traversed the dom.
-			// For now we simply hook hour linking function. If pageitems has already
+			// For now we simply hook our linking function. If pageitems has already
 			// traversed the dom it will called right away, otherwise it will be called
 			// once the dom has been traversed. This means we can include the menu in
 			// the dom either before the items are queried, or after. There is no
 			// positional dependency between the pageitems directive and the
 			// pagemenu directive.
 			getState().setBuilder(function() {
-				postlinkfn(scope, element);
+				postlinkfn(scope, element, attrs.childClasses);
 			});
 		}
 	};
 });
+
 mod.directive('pagemenuspy', function($location, $anchorScroll) {
 	return {
 		restrict: "A",

@@ -112,7 +112,7 @@ Possible values for *affix* are *top*, *bottom*, *left* and *right*.
 ### The pagemenu and pageitems directives
 The module provides two directives, *pageitems* attribute and *<pagemenu>* tag. The *pageitems* tag will parse the included HTML and query for items with a certain class. The menu will then be generated in the DOM where you put the *<pagemenu>* tag from that list of items. 
 
-The *pageitems* attribute accepts two parameters, *selector* and *topmargin*. The *selector* specifies the class used to query the DOM for menu items. The *topmargin* specifies a scrolling offset that is useful if you contain a static header and don't want your items to be under that static header when you click on the menu to scroll to them.
+The *pageitems* attribute accepts three parameters, *selector*, *topmargin* and *child-classes*. The *selector* specifies the class used to query the DOM for menu items. The *topmargin* specifies a scrolling offset that is useful if you contain a static header and don't want your items to be under that static header when you click on the menu to scroll to them. *child-classes* is a list of classes to apply on each nested menu.
 
 The list is mapped to a tree using the following heuristic. A type is generated for the item based on the tag name and classes. The type is compared to the previous item's type. If they are equal this new item is a sibling of the previous item. Otherwise we traverse a stack of parents. If a matching type is found the stack is popped to that level and the new item becomes a sibling at that level. If no parent is found the stack is pushed and the new item becomes a child of the last item.
 
