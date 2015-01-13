@@ -88,6 +88,7 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 			var hash = e.target.hash.substring(1);
 			$location.hash(hash);
 			$anchorScroll();
+			e.preventDefault();
 			if(getState().topMargin() !== 0 ) {
 				setTimeout(function() {
 					// scroll the extra top margin

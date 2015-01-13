@@ -15,8 +15,8 @@ mod.service('ScrollSpy', function($window) {
 			height: w.innerHeight,
 			maxWidth: w.document.body.scrollWidth,
 			maxHeight: w.document.body.scrollHeight,
-			posX: w.scrollX,
-			posY: w.scrollY
+			posX: w.scrollX || w.pageXOffset || w.document.documentElement.scrollLeft,
+			posY: w.scrollY || w.pageYOffset || w.document.documentElement.scrollTop
 		};
 
 		// remove but log overscroll
@@ -506,6 +506,7 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 			var hash = e.target.hash.substring(1);
 			$location.hash(hash);
 			$anchorScroll();
+			e.preventDefault();
 			if(getState().topMargin() !== 0 ) {
 				setTimeout(function() {
 					// scroll the extra top margin
