@@ -106,7 +106,7 @@
 							<pagemenu affix></pagemenu>
 						</div>
 					</div>
-					<div class="col-xs-6" pageitems selector="pageitem" topmargin="20">
+					<div id="contents" class="col-xs-6" pageitems selector="pageitem" topmargin="20">
 					<header>
 						<h1>Test page</h1>
 					</header>
@@ -138,6 +138,7 @@
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et tristique velit. Nam malesuada, augue eget lobortis tempor, sapien purus faucibus nisi, ut malesuada diam mi ut leo. Etiam mollis turpis sed aliquam feugiat. Mauris nibh magna, venenatis at ante vitae, commodo vehicula mauris. Phasellus nulla leo, vulputate vitae dignissim ut, imperdiet in enim. Aenean posuere dignissim neque, ut laoreet arcu dapibus a. Aliquam lobortis fermentum laoreet. Pellentesque pharetra tortor ac odio viverra, id rhoncus dui tincidunt. Vestibulum velit elit, vehicula ac porttitor sit amet, adipiscing in ligula. Fusce luctus malesuada nulla vitae dignissim. Nunc sit amet felis sapien.</p>
 						<h4 id="10" class="pageitem">Header 4.2.1</h4>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et tristique velit. Nam malesuada, augue eget lobortis tempor, sapien purus faucibus nisi, ut malesuada diam mi ut leo. Etiam mollis turpis sed aliquam feugiat. Mauris nibh magna, venenatis at ante vitae, commodo vehicula mauris. Phasellus nulla leo, vulputate vitae dignissim ut, imperdiet in enim. Aenean posuere dignissim neque, ut laoreet arcu dapibus a. Aliquam lobortis fermentum laoreet. Pellentesque pharetra tortor ac odio viverra, id rhoncus dui tincidunt. Vestibulum velit elit, vehicula ac porttitor sit amet, adipiscing in ligula. Fusce luctus malesuada nulla vitae dignissim. Nunc sit amet felis sapien.</p>
+						<h5 id="x10" class="pageitem">Header 4.2.1.1</h5>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et tristique velit. Nam malesuada, augue eget lobortis tempor, sapien purus faucibus nisi, ut malesuada diam mi ut leo. Etiam mollis turpis sed aliquam feugiat. Mauris nibh magna, venenatis at ante vitae, commodo vehicula mauris. Phasellus nulla leo, vulputate vitae dignissim ut, imperdiet in enim. Aenean posuere dignissim neque, ut laoreet arcu dapibus a. Aliquam lobortis fermentum laoreet. Pellentesque pharetra tortor ac odio viverra, id rhoncus dui tincidunt. Vestibulum velit elit, vehicula ac porttitor sit amet, adipiscing in ligula. Fusce luctus malesuada nulla vitae dignissim. Nunc sit amet felis sapien.</p>
 
 						<h3 id="11" class="pageitem">Header 4.3</h3>
@@ -153,7 +154,7 @@
 			</div>
 		</main>
 		<script src="../bower_components/angular/angular.js" type="text/javascript"></script>
-		<script src="../dist/ngScrollSpy.min.js" type="text/javascript"></script>
+		<script src="../dist/ngScrollSpy.debug.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			angular.module( 'app', ['ngScrollSpy'])
 				.config(function($locationProvider) {

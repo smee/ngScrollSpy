@@ -323,54 +323,68 @@ var state = {
 	run: function() {
 		if (this.builder && this.state) {
 			this.builder();
-			this.builder= null;
+			//this.builder= null;
 			this.state= null;
 			if(this.onRun) {
 				this.onRun();
-				this.onRun= null;
+				//this.onRun= null;
 			}
 		}
 	}
 };
-mod.directive('pageitems', function(ScrollSpy) {
+mod.directive('pageitems', function(ScrollSpy, $timeout) {
 	var linkfn = function(scope, elem, attrs) {
 		if (!angular.isDefined(scope.selector)) {
 			console.log('Pageitems: no selector defined');
 			return;
 		}
-		scope.spyElems = elem[0].getElementsByClassName(scope.selector); // dom items
-		scope.spies = {}; // menu items
-
-		// this function will be called once dom is parsed and menu is created
-		getState().onRun= function() {
-			scope.spies[scope.spyElems[0].id].set(); // highlight first element
-		};
-
-		// Store my state that pagemenu will use to build the menu
-		getState().store({
-			topMargin: function() {
-				return scope.topmargin |  0; // so that pagemenu can correctly offset scrolling
+		scope.spies = {};
+		scope.spyElems = [];
+		scope.topmargin = 0;
+		var initializationDone = false;
+		scope.$watch(
+			function () { //if the number of child nodes has changed, we need to scan again
+				return elem[0].childNodes.length;
 			},
-			addSpy: function(spyObj) {
-				scope.spies[spyObj.id] = spyObj; // each item in menu calls this function to register itself with pageitems
-			},
-			getSpy: function(id) {
-				return scope.spies[id]; // return the spy associated with id
-			},
-			items: function() {
-				return scope.spyElems; // return a list of dom items to be used to build menu
-			}
-		});
+			function (newValue, oldValue) {
+				if (newValue !== oldValue || !initializationDone) {
+					$timeout(function () {
+							initializationDone = true;
+							scope.spyElems = elem[0].getElementsByClassName(scope.selector); // dom items
+							scope.spies = {}; // menu items
 
-		var spyElems = scope.spyElems;
-		var topmargin = scope.topmargin | 0;
+							// this function will be called once dom is parsed and menu is created
+							getState().onRun = function () {
+								scope.spies[scope.spyElems[0].id].set(); // highlight first element
+							};
+
+							// Store my state that pagemenu will use to build the menu
+							getState().store({
+								topMargin: function () {
+									return scope.topmargin | 0; // so that pagemenu can correctly offset scrolling
+								},
+								addSpy: function (spyObj) {
+									scope.spies[spyObj.id] = spyObj; // each item in menu calls this function to register itself with pageitems
+								},
+								getSpy: function (id) {
+									return scope.spies[id]; // return the spy associated with id
+								},
+								items: function () {
+									return scope.spyElems; // return a list of dom items to be used to build menu
+								}
+							});
+						}
+						, 1000);
+				}
+			});
+
 		var scrollHandler= ScrollSpy.onYScroll(function(y, delta, data) {
 			var highlightSpy = null;
 			var spies = scope.spies;
 
 			// cycle through `spy` elements to find which to highlight
-			for (var i = 0; i < spyElems.length; i++) {
-				var spyElem = spyElems[i];
+			for (var i = 0; i < scope.spyElems.length; i++) {
+				var spyElem = scope.spyElems[i];
 				var spy = spies[spyElem.id];
 				spy.clear();
 
@@ -379,7 +393,7 @@ mod.directive('pageitems', function(ScrollSpy) {
 				}
 
 				var pos = spyElem.getBoundingClientRect().top;
-				if (pos <= topmargin) {
+				if (pos <= scope.topmargin) {
 					// the window has been scrolled past the top of a spy element
 					spy.pos = pos;
 
@@ -396,14 +410,15 @@ mod.directive('pageitems', function(ScrollSpy) {
 
 			// if we are at the bottom of the page, higlight last spy
 			if((data.height + y) >= data.maxHeight) {
-				highlightSpy = spies[spyElems[spyElems.length-1].id];
+				highlightSpy = spies[scope.spyElems[scope.spyElems.length-1].id];
 			}
 
-			highlightSpy.set();
-			scope.$on('destroy', function() {
-				ScrollSpy.removeHandler(scrollHandler);
-      });
-
+			if(highlightSpy){
+				highlightSpy.set();
+			}
+		});
+		scope.$on('destroy', function() {
+			ScrollSpy.removeHandler(scrollHandler);
 		});
 	};
 
@@ -499,8 +514,9 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 			markup += '</a>';
 		}
 		markup += '</li>';
-		element.append($compile(markup)(scope));
-
+		//var el = ;
+		element.html(markup);
+		$compile(element.contents())(scope)
 		element.on('click', function(e) {
 			// menu item clicked, lets scroll to the associated dom item
 			var hash = e.target.hash.substring(1);

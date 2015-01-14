@@ -81,8 +81,9 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 			markup += '</a>';
 		}
 		markup += '</li>';
-		element.append($compile(markup)(scope));
-
+		//var el = ;
+		element.html(markup);
+		$compile(element.contents())(scope)
 		element.on('click', function(e) {
 			// menu item clicked, lets scroll to the associated dom item
 			var hash = e.target.hash.substring(1);
