@@ -10,7 +10,7 @@ mod.directive('pageitems', function(ScrollSpy, $timeout) {
 		var initializationDone = false;
 		scope.$watch(
 			function () { //if the number of child nodes has changed, we need to scan again
-				return elem[0].childNodes.length;
+				return elem[0].getElementsByClassName(scope.selector).length;
 			},
 			function (newValue, oldValue) {
 				if (newValue !== oldValue || !initializationDone) {
@@ -40,7 +40,7 @@ mod.directive('pageitems', function(ScrollSpy, $timeout) {
 								}
 							});
 						}
-						, 1000);
+						, 2000);
 				}
 			});
 

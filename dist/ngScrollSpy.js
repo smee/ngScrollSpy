@@ -344,7 +344,7 @@ mod.directive('pageitems', function(ScrollSpy, $timeout) {
 		var initializationDone = false;
 		scope.$watch(
 			function () { //if the number of child nodes has changed, we need to scan again
-				return elem[0].childNodes.length;
+				return elem[0].getElementsByClassName(scope.selector).length;
 			},
 			function (newValue, oldValue) {
 				if (newValue !== oldValue || !initializationDone) {
@@ -374,7 +374,7 @@ mod.directive('pageitems', function(ScrollSpy, $timeout) {
 								}
 							});
 						}
-						, 1000);
+						, 2000);
 				}
 			});
 
@@ -447,9 +447,10 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 
 			// build type identifier
 			var level = data.tagName;
-			for (var i = 0; i < data.classList.length; i++) {
-				level += ',' + data.classList[i];
-			}
+      // SD: these classes should not be part of the level, classes may have been added by other directives etc.
+			//for (var i = 0; i < data.classList.length; i++) {
+			//	level += ',' + data.classList[i];
+			//}
 
 			// here be dragons
 			var stacksize = stack.length;
@@ -496,11 +497,11 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 			var item = itemConstruct(items[i]);
 			if (item.push) {
 				// new submenu
-				markup += '<menu class="nav ' + (childClasses?childClasses:'') + '">';
+				markup += '<nav class="nav ' + (childClasses?childClasses:'') + '">';
 			} else if (item.pop) {
 				// closing submenu, maybe more than one
 				for (var j = 0; j < item.pop; j++) {
-					markup += '</li></menu>';
+					markup += '</li></nav>';
 				}
 			} else if (i !== 0) {
 				// sibling
@@ -538,7 +539,7 @@ mod.directive('pagemenu', function($compile, $location, $anchorScroll) {
 	return {
 		restrict: 'E',
 		replace: true,
-		template: '<menu class="nav pagemenu"></menu>',
+		template: '<nav class="nav pagemenu"></nav>',
 		link: function(scope, element, attrs) {
 			// We can't create menu if pageitems element hasn't traversed the dom.
 			// For now we simply hook our linking function. If pageitems has already
